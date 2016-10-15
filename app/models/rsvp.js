@@ -35,12 +35,6 @@ const rsvpSchema = new mongoose.Schema({
   },
   questions: {
     type: Array,
-    default: [
-      {
-        text: 'Are you coming?',
-        options: ['Yes', 'No', 'Maybe'],
-      },
-    ],
   },
 }, {
   timestamps: true,
