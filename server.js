@@ -23,7 +23,7 @@ app.use(middleware['404']);
 // error handlers
 app.use(middleware['error-handler']);
 
-const debug = require('debug')('express-template:server');
+const debug = require('debug')('event-planner-api:server');
 const http = require('http');
 
 /**
