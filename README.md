@@ -202,6 +202,55 @@ Content-Type: application/json; charset=utf-8
 }
 ```
 
+### Events
+
+#### POST /events
+
+Request:
+```sh
+curl --include --request POST http://localhost:3000/events \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "event": {
+      "title": "Bagel Party",
+      "location": "GA Boston",
+      "date": "2016-10-15"
+    }
+  }'
+```
+
+```sh
+TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-create.sh
+```
+
+Response from POST: 
+
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "event": {
+    "__v": 0,
+    "updatedAt": "2016-10-15T19:17:06.555Z",
+    "createdAt": "2016-10-15T19:17:06.555Z",
+    "title": "Bagel Party",
+    "location": "GA Boston",
+    "date": "2016-10-15T00:00:00.000Z",
+    "_owner": "5802774e25d55121d3948041",
+    "_id": "580280b22b4c41285571bc2f",
+    "questions": [
+      {
+        "options": ["Yes","No","Maybe"],
+        "text": "Are you coming?"
+      }
+    ],
+    "id": "580280b22b4c41285571bc2f"
+  }
+}
+```
+
 ## [License](LICENSE)
 
 1.  All content is licensed under a CC­BY­NC­SA 4.0 license.
