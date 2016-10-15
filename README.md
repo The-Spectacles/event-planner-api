@@ -204,6 +204,14 @@ Content-Type: application/json; charset=utf-8
 
 ### Events
 
+| Verb | URI Pattern | Controller#Action |
+|------|-------------|-------------------|
+| GET  | `/events`    | `events#index`     |
+| GET  | `/events/1`  | `events#show`      |
+| POST  | `/events`  | `events#create`      |
+| PATCH  | `/events/1`  | `events#update`      |
+| DELETE  | `/events/1`  | `events#destroy`      |
+
 #### GET /events
 
 Request:
