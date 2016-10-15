@@ -23,6 +23,7 @@ curl --include --request POST http://localhost:3000/sign-up \
   --data '{
     "credentials": {
       "email": "an@example.email",
+      "username" : "Robin",
       "password": "an example password",
       "password_confirmation": "an example password"
     }
@@ -36,13 +37,17 @@ scripts/sign-up.sh
 Response:
 
 ```md
-HTTP/1.1 201 Created
+HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 
 {
   "user": {
-    "id": 1,
-    "email": "an@example.email"
+    "__v": 0,
+    "updatedAt": "2016-10-15T18:37:02.637Z",
+    "createdAt": "2016-10-15T18:37:02.637Z",
+    "email":"an@example.email", 
+    "username":"Robin", 
+    "_id":"1"
   }
 }
 ```
@@ -74,9 +79,13 @@ Content-Type: application/json; charset=utf-8
 
 {
   "user": {
-    "id": 1,
+    "_id": "1",
+    "updatedAt": "2016-10-15T18:38:40.496Z",
+    "createdAt": "2016-10-15T18:37:02.637Z",
     "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
+    "username": "Robin",
+    "token": "33ad6372f795694b333ec5f329ebeaaa",
+    "__v": 0
   }
 }
 ```
@@ -104,7 +113,7 @@ ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/change-password.sh
 Response:
 
 ```md
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
 ```
 
 #### DELETE /sign-out/:id
@@ -117,13 +126,13 @@ curl --include --request DELETE http://localhost:3000/sign-out/$ID \
 ```
 
 ```sh
-ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
+ID=5802774e25d55121d3948041 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
 ```
 
 Response:
 
 ```md
-HTTP/1.1 204 No Content
+HTTP/1.1 200 OK
 ```
 
 ### Users
