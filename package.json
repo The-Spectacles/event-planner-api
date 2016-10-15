@@ -1,5 +1,5 @@
 {
-  "name": "express-api-template",
+  "name": "event-planner-api",
   "version": "0.1.0",
   "private": true,
   "scripts": {
