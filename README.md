@@ -364,6 +364,23 @@ Response:
 HTTP/1.1 200 OK
 ```
 
+#### DELETE /events/:id
+
+Request:
+```sh 
+curl --include --request DELETE http://localhost:3000/events/$ID \
+  --header "Authorization: Token token=$TOKEN"
+``` 
+
+```sh
+ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-destroy.sh
+```
+
+Response: 
+```md
+HTTP/1.1 200 OK
+```
+
 ## [License](LICENSE)
 
 1.  All content is licensed under a CC­BY­NC­SA 4.0 license.
