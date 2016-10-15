@@ -339,6 +339,31 @@ Content-Type: application/json; charset=utf-8
 }
 ```
 
+#### PATCH /events/:id
+
+Request:
+```sh
+curl --include --request PATCH http://localhost:3000/events/$ID \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "event": {
+      "title": "Even Better Bagel Party",
+      "location": "GA Boston",
+      "date": "2016-10-16"
+    }
+  }'
+```
+
+```sh
+ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-create.sh
+```
+
+Response:
+```md
+HTTP/1.1 200 OK
+```
+
 ## [License](LICENSE)
 
 1.  All content is licensed under a CC­BY­NC­SA 4.0 license.
