@@ -204,6 +204,14 @@ Content-Type: application/json; charset=utf-8
 
 ### Events
 
+| Verb | URI Pattern | Controller#Action |
+|------|-------------|-------------------|
+| GET  | `/events`    | `events#index`     |
+| GET  | `/events/1`  | `events#show`      |
+| POST  | `/events`  | `events#create`      |
+| PATCH  | `/events/1`  | `events#update`      |
+| DELETE  | `/events/1`  | `events#destroy`      |
+
 #### GET /events
 
 Request:
@@ -337,6 +345,48 @@ Content-Type: application/json; charset=utf-8
     "id": "580280b22b4c41285571bc2f"
   }
 }
+```
+
+#### PATCH /events/:id
+
+Request:
+```sh
+curl --include --request PATCH http://localhost:3000/events/$ID \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "event": {
+      "title": "Even Better Bagel Party",
+      "location": "GA Boston",
+      "date": "2016-10-16"
+    }
+  }'
+```
+
+```sh
+ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-create.sh
+```
+
+Response:
+```md
+HTTP/1.1 200 OK
+```
+
+#### DELETE /events/:id
+
+Request:
+```sh 
+curl --include --request DELETE http://localhost:3000/events/$ID \
+  --header "Authorization: Token token=$TOKEN"
+``` 
+
+```sh
+ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-destroy.sh
+```
+
+Response: 
+```md
+HTTP/1.1 200 OK
 ```
 
 ## [License](LICENSE)
