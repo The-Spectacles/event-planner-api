@@ -204,6 +204,94 @@ Content-Type: application/json; charset=utf-8
 
 ### Events
 
+#### GET /events
+
+Request:
+```sh
+curl --include --request GET http://localhost:3000/events \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+```sh
+TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-index.sh
+```
+
+Response: 
+```md
+{
+  "events": [
+    {
+      "_id": "580280b22b4c41285571bc2f",
+      "updatedAt": "2016-10-15T19:28:38.885Z",
+      "createdAt": "2016-10-15T19:17:06.555Z",
+      "title": "Even Better Bagel Party",
+      "location": "GA Boston",
+      "date": "2016-10-16T00:00:00.000Z",
+      "_owner": "5802774e25d55121d3948041",
+      "__v": 0,
+      "questions": [
+        {
+          "text": "Are you coming?",
+          "options": ["Yes","No","Maybe"]
+        }
+      ],
+      "id":"580280b22b4c41285571bc2f"
+    },
+    {
+      "_id": "580280b22b4c41285571bc30",
+      "updatedAt": "2016-10-16T19:28:38.885Z",
+      "createdAt": "2016-10-16T19:17:06.555Z",
+      "title": "Pizza Party",
+      "location": "GA Boston",
+      "date": "2016-10-31T00:00:00.000Z",
+      "_owner": "5802774e25d55121d3948041",
+      "__v": 0,
+      "questions": [
+        {
+          "text": "Are you coming?",
+          "options": ["Yes","No","Maybe"]
+        }
+      ],
+      "id":"580280b22b4c41285571bc30"
+    },
+  ]
+}
+```
+
+#### GET /events/:id
+
+Request:
+```sh
+curl --include --request GET http://localhost:3000/events/$ID \
+  --header "Authorization: Token token=$TOKEN"
+``` 
+```sh
+ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-show.sh
+```
+
+Response:
+```md
+{
+  "event": {
+    "_id": "580280b22b4c41285571bc2f",
+    "updatedAt": "2016-10-15T19:28:38.885Z",
+    "createdAt": "2016-10-15T19:17:06.555Z",
+    "title": "Even Better Bagel Party",
+    "location": "GA Boston",
+    "date": "2016-10-16T00:00:00.000Z",
+    "_owner": "5802774e25d55121d3948041",
+    "__v": 0,
+    "questions": [
+      {
+        "text": "Are you coming?",
+        "options": ["Yes","No","Maybe"]
+      }
+    ],
+    "id": "580280b22b4c41285571bc2f"
+  }
+}
+```
+
 #### POST /events
 
 Request:
