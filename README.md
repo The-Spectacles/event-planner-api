@@ -126,7 +126,7 @@ curl --include --request DELETE http://localhost:3000/sign-out/$ID \
 ```
 
 ```sh
-ID=5802774e25d55121d3948041 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
+ID=1 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/sign-out.sh
 ```
 
 Response:
