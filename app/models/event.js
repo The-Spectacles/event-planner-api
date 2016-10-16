@@ -42,6 +42,12 @@ const eventSchema = new mongoose.Schema({
   toJSON: { virtuals: true },
 });
 
+eventSchema.virtual('rsvps', {
+  ref: 'Rsvp',
+  localField: '_id',
+  foreignField: '_event'
+});
+
 const Event = mongoose.model('Event', eventSchema);
 
 module.exports = Event;

@@ -14,6 +14,7 @@ const index = (req, res, next) => {
 
 const show = (req, res, next) => {
   Event.findById(req.params.id)
+    .populate('rsvps')
     .then(event => event ? res.json({ event }) : next())
     .catch(err => next(err));
 };
