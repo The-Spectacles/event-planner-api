@@ -12,6 +12,10 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: false,
+  },
   location: {
     type: String,
     required: true,
@@ -40,6 +44,12 @@ const eventSchema = new mongoose.Schema({
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
+});
+
+eventSchema.virtual('rsvps', {
+  ref: 'Rsvp',
+  localField: '_id',
+  foreignField: '_event'
 });
 
 const Event = mongoose.model('Event', eventSchema);
