@@ -30,6 +30,8 @@ const create = (req, res, next) => {
         return next();
       }
 
+      // set up temp object to hold the data we want from the event
+      // this lets us get rid of the timestamps, etc.
       let temp = {
         _event: event._id,
         title: event.title,
@@ -39,23 +41,14 @@ const create = (req, res, next) => {
         endTime: event.endTime,
       };
 
+      // merge the temporary object with the rsvp data we send in the request
+      // set the RSVP owner to the current user
       let rsvp = Object.assign(temp, req.body.rsvp, {
         _owner: req.currentUser._id,
       });
 
       return Rsvp.create(rsvp);
-      // delete rsvp._id; // delete old event ID out of the _id space so we make room for new RSVP id
-      // delete rsvp.id;
-      // delete rsvp.updatedAt;
-      // delete rsvp.createdAt;
-      // delete rsvp.rsvps;
-      // delete rsvp.__v;
-      // res.json({ rsvp }); // temporarily return the rsvp object we've created
-      // res.json({ rsvp });
     })
-    // .then((rsvp) => {
-    //   Rsvp.create(rsvp);
-    // })
     .then(rsvp => res.json({ rsvp }))
     .catch(err => next(err));
 };
