@@ -48,7 +48,8 @@ const update = (req, res, next) => {
 
       delete req.body._owner;
       return event.update(req.body.event)
-        .then(() => res.json({ event }));
+        .then(() => Event.findOne(search))
+        .then((event) => res.json({ event }));
     })
     .catch(err => next(err));
 };
