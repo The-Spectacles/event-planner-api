@@ -3,6 +3,7 @@
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 const Rsvp = models.rsvp;
+const Event = models.event;
 
 const authenticate = require('./concerns/authenticate');
 
@@ -20,11 +21,40 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  let rsvp = Object.assign(req.body.rsvp, {
-    _owner: req.currentUser._id,
+  // event id will come in req.body.rsvp._event
+  let search = { _id: req.body.rsvp._event };
+  // find the event & get back event information
+  Event.findOne(search)
+    .then(event => {
+      if (!event) {
+        return next();
+      }
 
-  });
-  Rsvp.create(rsvp)
+      let temp = {
+        _event: event._id,
+        title: event.title,
+        location: event.location,
+        date: event.date,
+        startTime: event.startTime,
+      };
+
+      let rsvp = Object.assign(temp, req.body.rsvp, {
+        _owner: req.currentUser._id,
+      });
+
+      return Rsvp.create(rsvp);
+      // delete rsvp._id; // delete old event ID out of the _id space so we make room for new RSVP id
+      // delete rsvp.id;
+      // delete rsvp.updatedAt;
+      // delete rsvp.createdAt;
+      // delete rsvp.rsvps;
+      // delete rsvp.__v;
+      // res.json({ rsvp }); // temporarily return the rsvp object we've created
+      // res.json({ rsvp });
+    })
+    // .then((rsvp) => {
+    //   Rsvp.create(rsvp);
+    // })
     .then(rsvp => res.json({ rsvp }))
     .catch(err => next(err));
 };
