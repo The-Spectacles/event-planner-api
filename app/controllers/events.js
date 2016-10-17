@@ -48,7 +48,7 @@ const update = (req, res, next) => {
 
       delete req.body._owner;
       return event.update(req.body.event)
-        .then(() => res.sendStatus(200));
+        .then(() => res.json({ event }));
     })
     .catch(err => next(err));
 };
