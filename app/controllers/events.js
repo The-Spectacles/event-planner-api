@@ -12,6 +12,14 @@ const index = (req, res, next) => {
     .catch(err => next(err));
 };
 
+const myevents = (req, res, next) => {
+  let search = { _owner: req.currentUser._id };
+  console.log();
+  Event.find(search)
+    .then(events => res.json({ events }))
+    .catch(err => next(err));
+};
+
 const show = (req, res, next) => {
   Event.findById(req.params.id)
     .populate('rsvps')
@@ -60,6 +68,7 @@ const destroy = (req, res, next) => {
 
 module.exports = controller({
   index,
+  myevents,
   show,
   create,
   update,
