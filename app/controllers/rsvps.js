@@ -36,6 +36,7 @@ const create = (req, res, next) => {
         location: event.location,
         date: event.date,
         startTime: event.startTime,
+        endTime: event.endTime,
       };
 
       let rsvp = Object.assign(temp, req.body.rsvp, {
