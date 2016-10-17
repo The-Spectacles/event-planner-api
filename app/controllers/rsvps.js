@@ -7,7 +7,8 @@ const Rsvp = models.rsvp;
 const authenticate = require('./concerns/authenticate');
 
 const index = (req, res, next) => {
-  Rsvp.find()
+  let search = { _owner: req.currentUser._id };
+  Rsvp.find(search)
     .then(rsvps => res.json({ rsvps }))
     .catch(err => next(err));
 };
