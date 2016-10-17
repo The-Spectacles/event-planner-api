@@ -3,6 +3,7 @@
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 const Rsvp = models.rsvp;
+const Event = models.event;
 
 const authenticate = require('./concerns/authenticate');
 
@@ -20,11 +21,34 @@ const show = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  let rsvp = Object.assign(req.body.rsvp, {
-    _owner: req.currentUser._id,
+  // event id will come in req.body.rsvp._event
+  let search = { _id: req.body.rsvp._event };
+  // find the event & get back event information
+  Event.findOne(search)
+    .then(event => {
+      if (!event) {
+        return next();
+      }
 
-  });
-  Rsvp.create(rsvp)
+      // set up temp object to hold the data we want from the event
+      // this lets us get rid of the timestamps, etc.
+      let temp = {
+        _event: event._id,
+        title: event.title,
+        location: event.location,
+        date: event.date,
+        startTime: event.startTime,
+        endTime: event.endTime,
+      };
+
+      // merge the temporary object with the rsvp data we send in the request
+      // set the RSVP owner to the current user
+      let rsvp = Object.assign(temp, req.body.rsvp, {
+        _owner: req.currentUser._id,
+      });
+
+      return Rsvp.create(rsvp);
+    })
     .then(rsvp => res.json({ rsvp }))
     .catch(err => next(err));
 };
