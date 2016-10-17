@@ -3,6 +3,7 @@
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 const Event = models.event;
+const Rsvp = models.rsvp;
 
 const authenticate = require('./concerns/authenticate');
 
@@ -59,11 +60,11 @@ const destroy = (req, res, next) => {
       if (!event) {
         return next();
       }
-
-      return event.remove()
+      return Rsvp.remove({ _event: req.params.id })
+      .then(() => event.remove())
         .then(() => res.sendStatus(200));
     })
-    .catch(err => next(err));
+      .catch(err => next(err));
 };
 
 module.exports = controller({
