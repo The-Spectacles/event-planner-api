@@ -12,6 +12,9 @@ module.exports = require('lib/wiring/routes')
 .resources('events')
 .resources('rsvps', { except: ['destroy'] })
 
+// custom routes
+.get('/my-events', 'events#myevents')
+
 // users of the app have special requirements
 .post('/sign-up', 'users#signup')
 .post('/sign-in', 'users#signin')
