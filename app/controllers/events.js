@@ -8,7 +8,14 @@ const Rsvp = models.rsvp;
 const authenticate = require('./concerns/authenticate');
 
 const index = (req, res, next) => {
-  Event.find()
+  // find events where owner of event is NOT current user
+  // AND where none of the rsvp owners for that event are the current user
+  // (where the current user hasn't yet RSVPed for that event)
+  // Event.find({ $and: [ { _owner: {$ne: req.currentUser._id } }, { 'rsvps._owner': { $ne: req.currentUser._id } } ] } )
+  Event.find({ _owner: { $ne: req.currentUser._id }})
+    // .then((events) => {
+      
+    // })
     .then(events => res.json({ events }))
     .catch(err => next(err));
 };
