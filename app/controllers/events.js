@@ -13,9 +13,25 @@ const index = (req, res, next) => {
   // (where the current user hasn't yet RSVPed for that event)
   // Event.find({ $and: [ { _owner: {$ne: req.currentUser._id } }, { 'rsvps._owner': { $ne: req.currentUser._id } } ] } )
   Event.find({ _owner: { $ne: req.currentUser._id }})
-    // .then((events) => {
-      
-    // })
+    .populate('rsvps')
+    .then((events) => {
+      let filteredEvents = [];
+      events.forEach((event) => {
+        // use array.every() to check whether all of the rsvps have a ._owner that is NOT req.currentUser._id
+        // this means the current user has NOT RSVPed to the event
+        // which means it's a good event
+        // if all rsvps do NOT belong to the user, array.every will return "true"
+        // if an rsvp does belong to the user, array.every will return "false"
+        let validEvent = event.rsvps.every((rsvp) => {
+          return rsvp._owner.toString() !== req.currentUser._id.toString();
+        });
+        if (validEvent) {
+          filteredEvents.push(event);
+        }
+      });
+
+      return filteredEvents;
+    })
     .then(events => res.json({ events }))
     .catch(err => next(err));
 };
