@@ -20,7 +20,7 @@ const show = (req, res, next) => {
     .catch(err => next(err));
 };
 
-const create = (req, res, next) => {
+const createorupdate = (req, res, next) => {
   // event id will come in req.body.rsvp._event
   let search = { _id: req.body.rsvp._event };
   // find the event & get back event information
@@ -53,20 +53,20 @@ const create = (req, res, next) => {
     .catch(err => next(err));
 };
 
-const update = (req, res, next) => {
-  let search = { _id: req.params.id, _owner: req.currentUser._id };
-  Rsvp.findOne(search)
-    .then(rsvp => {
-      if (!rsvp) {
-        return next();
-      }
+// const update = (req, res, next) => {
+//   let search = { _id: req.params.id, _owner: req.currentUser._id };
+//   Rsvp.findOne(search)
+//     .then(rsvp => {
+//       if (!rsvp) {
+//         return next();
+//       }
 
-      delete req.body._owner;  // disallow owner reassignment.
-      return rsvp.update(req.body.rsvp)
-        .then(() => res.sendStatus(200));
-    })
-    .catch(err => next(err));
-};
+//       delete req.body._owner;  // disallow owner reassignment.
+//       return rsvp.update(req.body.rsvp)
+//         .then(() => res.sendStatus(200));
+//     })
+//     .catch(err => next(err));
+// };
 
 // const destroy = (req, res, next) => {
 //   let search = { _id: req.params.id, _owner: req.currentUser._id };
@@ -85,8 +85,8 @@ const update = (req, res, next) => {
 module.exports = controller({
   index,
   show,
-  create,
-  update,
+  createorupdate,
+  // update,
 //  destroy,
 }, { before: [
   { method: authenticate, except: [] },
