@@ -10,7 +10,10 @@ module.exports = require('lib/wiring/routes')
 // standards RESTful routes
 .resources('examples')
 .resources('events')
-.resources('rsvps', { except: ['destroy'] })
+// .resources('rsvps', { except: ['create', 'update', 'destroy'] })
+.get('/rsvps', 'rsvps#index')
+.get('/rsvps/:id', 'rsvps#show')
+.post('/rsvps', 'rsvps#createorupdate')
 
 // custom routes
 .get('/my-events', 'events#myevents')
