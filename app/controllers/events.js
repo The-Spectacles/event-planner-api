@@ -71,7 +71,7 @@ const update = (req, res, next) => {
 
       delete req.body._owner;
       return event.update(req.body.event)
-        .then(() => Event.findOne(search))
+        .then(() => Event.findOne(search).populate('rsvps'))
         .then((event) => res.json({ event }));
     })
     .catch(err => next(err));
