@@ -47,7 +47,7 @@ const create = (req, res, next) => {
         _owner: req.currentUser._id,
       });
 
-      return Rsvp.create(rsvp);
+      return Rsvp.update({ _event: req.body.rsvp._event, _owner: req.currentUser._id}, rsvp, { upsert: true});
     })
     .then(rsvp => res.json({ rsvp }))
     .catch(err => next(err));
