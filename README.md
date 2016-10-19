@@ -208,11 +208,14 @@ Content-Type: application/json; charset=utf-8
 |------|-------------|-------------------|
 | GET  | `/events`    | `events#index`     |
 | GET  | `/events/1`  | `events#show`      |
+| GET | `/my-events` | `events#myevents` |
 | POST  | `/events`  | `events#create`      |
 | PATCH  | `/events/1`  | `events#update`      |
 | DELETE  | `/events/1`  | `events#destroy`      |
 
 #### GET /events
+
+Gets all events that the current user does not own and to which the current user has not already RSVP-ed.
 
 Request:
 ```sh
@@ -234,7 +237,10 @@ Response:
       "createdAt": "2016-10-15T19:17:06.555Z",
       "title": "Even Better Bagel Party",
       "location": "GA Boston",
+      "description": "Mmmm bagels",
       "date": "2016-10-16T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
       "_owner": "5802774e25d55121d3948041",
       "__v": 0,
       "questions": [
@@ -243,6 +249,7 @@ Response:
           "options": ["Yes","No","Maybe"]
         }
       ],
+      rsvps: [],
       "id":"580280b22b4c41285571bc2f"
     },
     {
@@ -251,7 +258,10 @@ Response:
       "createdAt": "2016-10-16T19:17:06.555Z",
       "title": "Pizza Party",
       "location": "GA Boston",
+      "description": "Mmmm pizza",
       "date": "2016-10-31T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
       "_owner": "5802774e25d55121d3948041",
       "__v": 0,
       "questions": [
@@ -260,6 +270,7 @@ Response:
           "options": ["Yes","No","Maybe"]
         }
       ],
+      rsvps: [],
       "id":"580280b22b4c41285571bc30"
     },
   ]
@@ -279,6 +290,9 @@ ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-show.sh
 
 Response:
 ```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
 {
   "event": {
     "_id": "580280b22b4c41285571bc2f",
@@ -287,6 +301,8 @@ Response:
     "title": "Even Better Bagel Party",
     "location": "GA Boston",
     "date": "2016-10-16T00:00:00.000Z",
+    "startTime": "2016-05-18T16:00:00.000Z",
+    "endTime": "2016-05-18T19:00:00.000Z",
     "_owner": "5802774e25d55121d3948041",
     "__v": 0,
     "questions": [
@@ -295,9 +311,72 @@ Response:
         "options": ["Yes","No","Maybe"]
       }
     ],
+    rsvps: [],
     "id": "580280b22b4c41285571bc2f"
   }
 }
+```
+
+#### GET /my-events
+
+Request:
+```sh
+curl --include --request GET http://localhost:3000/my-events \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+```sh
+TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/my-events.sh
+```
+
+Response: 
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "events": [
+    {
+      "_id": "580280b22b4c41285571bc2f",
+      "updatedAt": "2016-10-15T19:28:38.885Z",
+      "createdAt": "2016-10-15T19:17:06.555Z",
+      "title": "Donut Party",
+      "location": "GA Boston",
+      "date": "2016-10-31T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
+      "_owner": "5802774e25d55121d3948041",
+      "__v": 0,
+      "questions": [
+        {
+          "text": "Are you coming?",
+          "options": ["Yes","No","Maybe"]
+        }
+      ],
+      "id":"580280b22b4c41285571bc2f"
+    },
+    {
+      "_id": "580280b22b4c41285571bc30",
+      "updatedAt": "2016-10-16T19:28:38.885Z",
+      "createdAt": "2016-10-16T19:17:06.555Z",
+      "title": "Pizza Party",
+      "location": "GA Boston",
+      "date": "2016-10-31T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
+      "_owner": "5802774e25d55121d3948041",
+      "__v": 0,
+      "questions": [
+        {
+          "text": "Are you coming?",
+          "options": ["Yes","No","Maybe"]
+        }
+      ],
+      "id":"580280b22b4c41285571bc30"
+    },
+  ]
+}
+
 ```
 
 #### POST /events
@@ -311,7 +390,10 @@ curl --include --request POST http://localhost:3000/events \
     "event": {
       "title": "Bagel Party",
       "location": "GA Boston",
-      "date": "2016-10-15"
+      "description": "Mmmm bagels",
+      "date": "2016-10-18"
+      "startTime": "2016-10-18T16:00:00",
+      "endTime": "2016-10-18T19:00:00",
     }
   }'
 ```
@@ -333,7 +415,10 @@ Content-Type: application/json; charset=utf-8
     "createdAt": "2016-10-15T19:17:06.555Z",
     "title": "Bagel Party",
     "location": "GA Boston",
-    "date": "2016-10-15T00:00:00.000Z",
+    "description": "Mmmm bagels",
+    "date": "2016-10-18T00:00:00.000Z",
+    "startTime": "2016-10-18T16:00:00.000Z",
+    "endTime": "2016-10-18T19:00:00.000Z",
     "_owner": "5802774e25d55121d3948041",
     "_id": "580280b22b4c41285571bc2f",
     "questions": [

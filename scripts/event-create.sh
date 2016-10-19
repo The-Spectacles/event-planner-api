@@ -10,7 +10,10 @@ curl --include --request POST http://localhost:3000/events \
     "event": {
       "title": "Bagel Party",
       "location": "GA Boston",
+      "description": "Mmmm bagels",
       "date": "2016-10-15"
+      "startTime": "2016-10-15T10:00:00",
+      "endTime": "2016-10-15T13:00:00"
     }
   }'
 
@@ -22,6 +25,7 @@ curl --include --request POST http://localhost:3000/events \
     "event": {
       "title": "Pizza Partay",
       "location": "Dominos",
+      "description": "Mmmm pizza",
       "date": "2016-10-15",
       "startTime": "2016-05-18T16:00:00",
       "endTime": "2016-05-18T19:00:00"
