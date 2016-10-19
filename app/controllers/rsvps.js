@@ -36,6 +36,7 @@ const createorupdate = (req, res, next) => {
         _event: event._id,
         title: event.title,
         location: event.location,
+        description: event.description,
         date: event.date,
         startTime: event.startTime,
         endTime: event.endTime,
