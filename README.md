@@ -1,4 +1,6 @@
-# Event Planner API
+# Happening API
+
+Express API for [Happening](https://github.com/The-Spectacles/event-planner), an event planning app.
 
 ## API
 
