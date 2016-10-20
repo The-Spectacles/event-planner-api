@@ -488,7 +488,7 @@ Request:
 ```sh 
 curl --include --request GET http://localhost:3000/rsvps \
   --header "Authorization: Token token=$TOKEN"
-```sh 
+```
 
 Response:
 ```md
@@ -542,7 +542,7 @@ Request:
 ```sh 
 curl --include --request GET http://localhost:3000/rsvps/$ID \
   --header "Authorization: Token token=$TOKEN"
-```sh 
+```
 
 Response:
 ```md
