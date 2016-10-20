@@ -140,7 +140,7 @@ HTTP/1.1 200 OK
 | Verb | URI Pattern | Controller#Action |
 |------|-------------|-------------------|
 | GET  | `/users`    | `users#index`     |
-| GET  | `/users/1`  | `users#show`      |
+| GET  | `/users/:id`  | `users#show`      |
 
 #### GET /users
 
@@ -207,11 +207,11 @@ Content-Type: application/json; charset=utf-8
 | Verb | URI Pattern | Controller#Action |
 |------|-------------|-------------------|
 | GET  | `/events`    | `events#index`     |
-| GET  | `/events/1`  | `events#show`      |
+| GET  | `/events/:id`  | `events#show`      |
 | GET | `/my-events` | `events#myevents` |
 | POST  | `/events`  | `events#create`      |
-| PATCH  | `/events/1`  | `events#update`      |
-| DELETE  | `/events/1`  | `events#destroy`      |
+| PATCH  | `/events/:id`  | `events#update`      |
+| DELETE  | `/events/:id`  | `events#destroy`      |
 
 #### GET /events
 
@@ -473,6 +473,159 @@ Response:
 ```md
 HTTP/1.1 200 OK
 ```
+
+### RSVPs
+
+| Verb | URI Pattern | Controller#Action |
+|------|-------------|-------------------|
+| GET  | `/rsvps`    | `rsvps#index`     |
+| GET  | `/rsvps/:id`  | `rsvps#show`      |
+| POST  | `/rsvps`  | `rsvps#createorupdate`      |
+
+#### GET /rsvps
+
+Request: 
+```sh 
+curl --include --request GET http://localhost:3000/rsvps \
+  --header "Authorization: Token token=$TOKEN"
+```sh 
+
+Response:
+```md
+{
+  "rsvps": [
+    { 
+      "_id": "5806bbc72213ea4a41769390",
+      "_event": "580652be8a9ea3e414ceaca7",
+      "_owner": "5806bbc1f8d026055deb4568",
+      "createdAt": "2016-10-19T00:18:15.470Z",
+      "endTime":"2017-10-10T10:21:00.000Z", 
+      "startTime":"2017-10-10T10:11:00.000Z",
+      "date": "2017-10-10T00:00:00.000Z",
+      "location": "Cool party place",
+      "title": "Cool party",
+      "updatedAt": "2016-10-19T00:18:15.470Z",
+      "questions": [
+        {
+          "options": "Yes",
+          "text": "Are you coming?"
+        }
+      ],
+      "id": "5806bbc72213ea4a41769390"
+    },
+    {
+      "_id": "5806bbcd2213ea4a41769391",
+      "_event": "5806ac2fb26af00318e8a96c",
+      "_owner": "5806bbc1f8d026055deb4568",
+      "createdAt": "2016-10-19T00:18:21.222Z",
+      "endTime": "2016-10-15T14:01:00.000Z",
+      "startTime": "2016-10-15T13:01:00.000Z",
+      "date": "2016-10-15T00:00:00.000Z",
+      "location": "Another cool party place",
+      "title": "Another cool party",
+      "updatedAt": "2016-10-19T00:18:21.222Z",
+      "questions": [
+        {
+          "options": "Yes",
+          "text": "Are you coming?"
+        }
+      ],
+      "id": "5806bbcd2213ea4a41769391"
+    }
+  ]
+}
+```
+
+#### GET /rsvps/:id
+
+Request: 
+```sh 
+curl --include --request GET http://localhost:3000/rsvps/$ID \
+  --header "Authorization: Token token=$TOKEN"
+```sh 
+
+Response:
+```md
+{
+  "rsvp": {
+    "_id": "5806bbc72213ea4a41769390",
+    "_event": "580652be8a9ea3e414ceaca7",
+    "_owner": "5806bbc1f8d026055deb4568",
+    "createdAt": "2016-10-19T00:18:15.470Z",
+    "endTime":"2017-10-10T10:21:00.000Z", 
+    "startTime":"2017-10-10T10:11:00.000Z",
+    "date": "2017-10-10T00:00:00.000Z",
+    "location": "Cool party place",
+    "title": "Cool party",
+    "updatedAt": "2016-10-19T00:18:15.470Z",
+    "questions": [
+      {
+        "options": "Yes",
+        "text": "Are you coming?"
+      }
+    ],
+    "id": "5806bbc72213ea4a41769390"
+  }
+}
+```
+
+#### POST /rsvps
+
+Sending a POST request to `/rsvps` creates a new RSVP if no RSVP exists for the current for the specified event. If a matching RSVP already exists, the request updates that RSVP.
+
+Request:
+```sh
+curl --include --request POST http://localhost:3000/rsvps \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "rsvp": {
+      "_event": "$EVENT",
+      "questions":
+      [
+        {
+          "text": "Are you coming?",
+          "options": "Yes"
+        }
+      ]
+    }
+  }'
+```
+
+Response (for a newly created RSVP): 
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "rsvp": {
+    "ok": 1,
+    "nModified": 0,
+    "n": 1,
+    "upserted": [
+      {
+        "index": 0,
+        "_id": "580809352213ea4a4176939c"
+      }
+    ]
+  }
+}
+```
+
+Response (for an updated RSVP): 
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "rsvp": {
+    "ok": 1,
+    "nModified": 1,
+    "n": 1
+  }
+}
+```
+
 
 ## [License](LICENSE)
 

@@ -11,7 +11,7 @@ curl --include --request POST http://localhost:3000/events \
       "title": "Bagel Party",
       "location": "GA Boston",
       "description": "Mmmm bagels",
-      "date": "2016-10-15"
+      "date": "2016-10-15",
       "startTime": "2016-10-15T10:00:00",
       "endTime": "2016-10-15T13:00:00"
     }
