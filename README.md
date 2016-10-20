@@ -1,4 +1,6 @@
-# Event Planner API
+# Happening API
+
+Express API for [Happening](https://github.com/The-Spectacles/event-planner), an event planning app.
 
 ## API
 
@@ -140,7 +142,7 @@ HTTP/1.1 200 OK
 | Verb | URI Pattern | Controller#Action |
 |------|-------------|-------------------|
 | GET  | `/users`    | `users#index`     |
-| GET  | `/users/1`  | `users#show`      |
+| GET  | `/users/:id`  | `users#show`      |
 
 #### GET /users
 
@@ -207,12 +209,15 @@ Content-Type: application/json; charset=utf-8
 | Verb | URI Pattern | Controller#Action |
 |------|-------------|-------------------|
 | GET  | `/events`    | `events#index`     |
-| GET  | `/events/1`  | `events#show`      |
+| GET  | `/events/:id`  | `events#show`      |
+| GET | `/my-events` | `events#myevents` |
 | POST  | `/events`  | `events#create`      |
-| PATCH  | `/events/1`  | `events#update`      |
-| DELETE  | `/events/1`  | `events#destroy`      |
+| PATCH  | `/events/:id`  | `events#update`      |
+| DELETE  | `/events/:id`  | `events#destroy`      |
 
 #### GET /events
+
+Gets all events that the current user does not own and to which the current user has not already RSVP-ed.
 
 Request:
 ```sh
@@ -234,7 +239,10 @@ Response:
       "createdAt": "2016-10-15T19:17:06.555Z",
       "title": "Even Better Bagel Party",
       "location": "GA Boston",
+      "description": "Mmmm bagels",
       "date": "2016-10-16T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
       "_owner": "5802774e25d55121d3948041",
       "__v": 0,
       "questions": [
@@ -243,6 +251,7 @@ Response:
           "options": ["Yes","No","Maybe"]
         }
       ],
+      rsvps: [],
       "id":"580280b22b4c41285571bc2f"
     },
     {
@@ -251,7 +260,10 @@ Response:
       "createdAt": "2016-10-16T19:17:06.555Z",
       "title": "Pizza Party",
       "location": "GA Boston",
+      "description": "Mmmm pizza",
       "date": "2016-10-31T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
       "_owner": "5802774e25d55121d3948041",
       "__v": 0,
       "questions": [
@@ -260,6 +272,7 @@ Response:
           "options": ["Yes","No","Maybe"]
         }
       ],
+      rsvps: [],
       "id":"580280b22b4c41285571bc30"
     },
   ]
@@ -279,6 +292,9 @@ ID=58 TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/event-show.sh
 
 Response:
 ```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
 {
   "event": {
     "_id": "580280b22b4c41285571bc2f",
@@ -287,6 +303,8 @@ Response:
     "title": "Even Better Bagel Party",
     "location": "GA Boston",
     "date": "2016-10-16T00:00:00.000Z",
+    "startTime": "2016-05-18T16:00:00.000Z",
+    "endTime": "2016-05-18T19:00:00.000Z",
     "_owner": "5802774e25d55121d3948041",
     "__v": 0,
     "questions": [
@@ -295,9 +313,72 @@ Response:
         "options": ["Yes","No","Maybe"]
       }
     ],
+    rsvps: [],
     "id": "580280b22b4c41285571bc2f"
   }
 }
+```
+
+#### GET /my-events
+
+Request:
+```sh
+curl --include --request GET http://localhost:3000/my-events \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+```sh
+TOKEN=33ad6372f795694b333ec5f329ebeaaa scripts/my-events.sh
+```
+
+Response: 
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "events": [
+    {
+      "_id": "580280b22b4c41285571bc2f",
+      "updatedAt": "2016-10-15T19:28:38.885Z",
+      "createdAt": "2016-10-15T19:17:06.555Z",
+      "title": "Donut Party",
+      "location": "GA Boston",
+      "date": "2016-10-31T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
+      "_owner": "5802774e25d55121d3948041",
+      "__v": 0,
+      "questions": [
+        {
+          "text": "Are you coming?",
+          "options": ["Yes","No","Maybe"]
+        }
+      ],
+      "id":"580280b22b4c41285571bc2f"
+    },
+    {
+      "_id": "580280b22b4c41285571bc30",
+      "updatedAt": "2016-10-16T19:28:38.885Z",
+      "createdAt": "2016-10-16T19:17:06.555Z",
+      "title": "Pizza Party",
+      "location": "GA Boston",
+      "date": "2016-10-31T00:00:00.000Z",
+      "startTime": "2016-05-18T16:00:00.000Z",
+      "endTime": "2016-05-18T19:00:00.000Z",
+      "_owner": "5802774e25d55121d3948041",
+      "__v": 0,
+      "questions": [
+        {
+          "text": "Are you coming?",
+          "options": ["Yes","No","Maybe"]
+        }
+      ],
+      "id":"580280b22b4c41285571bc30"
+    },
+  ]
+}
+
 ```
 
 #### POST /events
@@ -311,7 +392,10 @@ curl --include --request POST http://localhost:3000/events \
     "event": {
       "title": "Bagel Party",
       "location": "GA Boston",
-      "date": "2016-10-15"
+      "description": "Mmmm bagels",
+      "date": "2016-10-18"
+      "startTime": "2016-10-18T16:00:00",
+      "endTime": "2016-10-18T19:00:00",
     }
   }'
 ```
@@ -333,7 +417,10 @@ Content-Type: application/json; charset=utf-8
     "createdAt": "2016-10-15T19:17:06.555Z",
     "title": "Bagel Party",
     "location": "GA Boston",
-    "date": "2016-10-15T00:00:00.000Z",
+    "description": "Mmmm bagels",
+    "date": "2016-10-18T00:00:00.000Z",
+    "startTime": "2016-10-18T16:00:00.000Z",
+    "endTime": "2016-10-18T19:00:00.000Z",
     "_owner": "5802774e25d55121d3948041",
     "_id": "580280b22b4c41285571bc2f",
     "questions": [
@@ -388,6 +475,159 @@ Response:
 ```md
 HTTP/1.1 200 OK
 ```
+
+### RSVPs
+
+| Verb | URI Pattern | Controller#Action |
+|------|-------------|-------------------|
+| GET  | `/rsvps`    | `rsvps#index`     |
+| GET  | `/rsvps/:id`  | `rsvps#show`      |
+| POST  | `/rsvps`  | `rsvps#createorupdate`      |
+
+#### GET /rsvps
+
+Request: 
+```sh 
+curl --include --request GET http://localhost:3000/rsvps \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+Response:
+```md
+{
+  "rsvps": [
+    { 
+      "_id": "5806bbc72213ea4a41769390",
+      "_event": "580652be8a9ea3e414ceaca7",
+      "_owner": "5806bbc1f8d026055deb4568",
+      "createdAt": "2016-10-19T00:18:15.470Z",
+      "endTime":"2017-10-10T10:21:00.000Z", 
+      "startTime":"2017-10-10T10:11:00.000Z",
+      "date": "2017-10-10T00:00:00.000Z",
+      "location": "Cool party place",
+      "title": "Cool party",
+      "updatedAt": "2016-10-19T00:18:15.470Z",
+      "questions": [
+        {
+          "options": "Yes",
+          "text": "Are you coming?"
+        }
+      ],
+      "id": "5806bbc72213ea4a41769390"
+    },
+    {
+      "_id": "5806bbcd2213ea4a41769391",
+      "_event": "5806ac2fb26af00318e8a96c",
+      "_owner": "5806bbc1f8d026055deb4568",
+      "createdAt": "2016-10-19T00:18:21.222Z",
+      "endTime": "2016-10-15T14:01:00.000Z",
+      "startTime": "2016-10-15T13:01:00.000Z",
+      "date": "2016-10-15T00:00:00.000Z",
+      "location": "Another cool party place",
+      "title": "Another cool party",
+      "updatedAt": "2016-10-19T00:18:21.222Z",
+      "questions": [
+        {
+          "options": "Yes",
+          "text": "Are you coming?"
+        }
+      ],
+      "id": "5806bbcd2213ea4a41769391"
+    }
+  ]
+}
+```
+
+#### GET /rsvps/:id
+
+Request: 
+```sh 
+curl --include --request GET http://localhost:3000/rsvps/$ID \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+Response:
+```md
+{
+  "rsvp": {
+    "_id": "5806bbc72213ea4a41769390",
+    "_event": "580652be8a9ea3e414ceaca7",
+    "_owner": "5806bbc1f8d026055deb4568",
+    "createdAt": "2016-10-19T00:18:15.470Z",
+    "endTime":"2017-10-10T10:21:00.000Z", 
+    "startTime":"2017-10-10T10:11:00.000Z",
+    "date": "2017-10-10T00:00:00.000Z",
+    "location": "Cool party place",
+    "title": "Cool party",
+    "updatedAt": "2016-10-19T00:18:15.470Z",
+    "questions": [
+      {
+        "options": "Yes",
+        "text": "Are you coming?"
+      }
+    ],
+    "id": "5806bbc72213ea4a41769390"
+  }
+}
+```
+
+#### POST /rsvps
+
+Sending a POST request to `/rsvps` creates a new RSVP if no RSVP exists for the current for the specified event. If a matching RSVP already exists, the request updates that RSVP.
+
+Request:
+```sh
+curl --include --request POST http://localhost:3000/rsvps \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "rsvp": {
+      "_event": "$EVENT",
+      "questions":
+      [
+        {
+          "text": "Are you coming?",
+          "options": "Yes"
+        }
+      ]
+    }
+  }'
+```
+
+Response (for a newly created RSVP): 
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "rsvp": {
+    "ok": 1,
+    "nModified": 0,
+    "n": 1,
+    "upserted": [
+      {
+        "index": 0,
+        "_id": "580809352213ea4a4176939c"
+      }
+    ]
+  }
+}
+```
+
+Response (for an updated RSVP): 
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "rsvp": {
+    "ok": 1,
+    "nModified": 1,
+    "n": 1
+  }
+}
+```
+
 
 ## [License](LICENSE)
 
